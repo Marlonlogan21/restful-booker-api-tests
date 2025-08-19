@@ -1,0 +1,33 @@
+describe('API Test - Simulated Sauce Demo Login', () => {
+  it('should successfully log in with valid credentials', () => {
+    cy.request({
+      method: 'POST',
+      url: 'https://reqres.in/api/login',
+      body: {
+        email: 'eve.holt@reqres.in',
+        password: 'cityslicka'
+      },
+      failOnStatusCode: false
+    }).then((response) => {
+      expect(response.status).to.eq(200);
+      expect(response.body).to.have.property('token');
+      cy.log('Token:', response.body.token);
+    });
+  });
+
+  it('should fail login with invalid credentials', () => {
+    cy.request({
+      method: 'POST',
+      url: 'https://reqres.in/api/login',
+      body: {
+        email: 'wrong@email.com',
+        password: 'incorrect'
+      },
+      failOnStatusCode: false
+    }).then((response) => {
+      expect(response.status).to.eq(400);
+      expect(response.body).to.have.property('error');
+      cy.log('Error Message:', response.body.error);
+    });
+  });
+});
